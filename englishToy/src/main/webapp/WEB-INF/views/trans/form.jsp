@@ -151,19 +151,19 @@ footer{
 	
 	function resize(obj) {
 		obj.style.height ='1px';
-		obj.style.height = ( obj.scrollHeight) +'px';
+		obj.style.height = (obj.scrollHeight) +'px';
 		
 	}
 	
 	function save_word() {
 		let form = document.getElementById("form");
 		if(form[2].value == ""){
-			console.log(form[2]);
+			alert("단어를 번역해주세요.");
 			return false;
 		}else{
-			var before= form[1].value = text;
-			console.log(before);
-			
+			form[1].value = text;
+			let lang = document.getElementById("transLang");
+			form[3].value = lang.innerText;
 			return form.submit();
 		}
 	}
@@ -213,6 +213,7 @@ footer{
 							<input type="hidden" name="mode" value="trans"/>
 							<input type="hidden" name="afterText" id="afterText"value=""/>
 							<textarea id="result" name="result"></textarea>
+							<input type="hidden" name="lang" value=""/>
 						</div>
 						<div class="trans-card-footer">
 							<button type="button" class="trans-btn btn1"  onclick="save_word()">저장하기</button>

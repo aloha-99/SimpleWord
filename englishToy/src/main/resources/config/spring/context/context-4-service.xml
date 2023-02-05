@@ -8,7 +8,8 @@
 	</bean>
 	
 	<bean id="WordService" class="service.WordService">
-		<constructor-arg ref="WordDAO"/>
+		<constructor-arg ref="WordDAO" index="0"/>
+		<constructor-arg ref="DicDAO" index="1"/>
 	</bean>
 	
 	<bean id="AdminService" class="service.AdminService">
@@ -26,6 +27,10 @@
 	
 	<bean id="TransService" class="service.TransService">
 		<constructor-arg ref="TransDAO"/>
+	</bean>
+	
+	<bean id="DicService" class="service.DictionService">
+		<constructor-arg ref="DicDAO"/>
 	</bean>
 
 </beans>

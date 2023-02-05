@@ -45,6 +45,7 @@ public class LoginController {
 		
 		String mode = request.getParameter("mode");
 		vo.setMode(mode);
+		System.out.println(mode);
 		
 		if(mode.equals("kakao")) { // 카카오 로그인
 			name = request.getParameter("user_name");
@@ -62,7 +63,6 @@ public class LoginController {
 		}
 		
 		Integer no = loginService.loginCheck(vo);
-		System.out.println(no +"로그인");
 		
 		if(no != null) {
 			msg = "로그인 되었습니다. 환영합니다";

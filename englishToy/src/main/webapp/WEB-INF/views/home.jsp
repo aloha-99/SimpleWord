@@ -23,6 +23,7 @@
 		<h2 id="head">LOGIN</h2>
 		<br><br><br>
 		<form action="${cpath}/login/login?mode=nomal" method="post">
+
 			<table>
 				<tr class="loginInput">
 					<th><input type="text" name="id" value="${id }" placeholder="아이디" required="required"></th>
@@ -62,7 +63,7 @@
 			 	</th> 		 	
 			 </tr> 
 				</table>
-				</form>
+			</form>
 			</div>
       </div>
     </div>

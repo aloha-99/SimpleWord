@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,17 +16,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import common.RedirectPath;
 import common.ScriptUtil;
 import common.ViewPath;
 import service.WordService;
 import vo.AdminVO;
+import vo.DictionVO;
+import vo.ReferVO;
 import vo.WordVO;
 
 @Controller
 public class WordController {
 
    private WordService wordService;
+//   private DictionService dicService;
    
    public WordController(WordService wordService) {
       this.wordService = wordService;
@@ -78,20 +82,26 @@ public class WordController {
       }
    @RequestMapping("/word/search")
    @ResponseBody
-   public String search(HttpServletRequest request) {
+   public Object search(HttpServletRequest request) {
       String word_name = request.getParameter("word_name");
-      
-      List<AdminVO> list = wordService.meaningList(word_name);
-      if(list.size()<1) {
+      String lang = request.getParameter("lang");
+      DictionVO vo = new DictionVO();
+      vo.setDiction_word(word_name);
+      vo.setLang(lang);
+     
+      List<AdminVO> list = wordService.meaningList(vo);
+
+      if(list.isEmpty()) {
          return "검색된 결과가 없습니다.";
       }else {         
-         String [] arr = new String[list.size()]; 
-         for(int i = 0; i < list.size(); i++) {
-            arr[i] = list.get(i).getkDiction_word();         
-         }
-         String result =  String.join(",",arr);
+         Map<String, String> map = new HashMap<String, String>();
          
-      return result;
+         for(AdminVO v : list) {
+        	 map.put("ko",v.getkDiction_word());
+        	 map.put("en", v.geteDiction_word()); 
+        	 map.put("lang",lang);
+         }     
+      return map;
       }
    }
    @RequestMapping("/word/insert")
@@ -120,6 +130,8 @@ public class WordController {
     	  strList.removeAll(Arrays.asList(""));
     	  arr = strList.toArray(new String[0]);
     	  
+    	  String lang = request.getParameter("lang");
+    	  
     	  if(arr.length != value.length) {
     		  msg = "다시 양식에 맞지 않습니다.";
     		  try {
@@ -127,7 +139,26 @@ public class WordController {
     			} catch (IOException e) {
     				e.printStackTrace();
     			}
-    	  }else {
+    	  }
+    	  if(arr.length == value.length && arr.length == 1) {
+    		  DictionVO kvo = new DictionVO(); // 한글
+    		  DictionVO evo = new DictionVO(); // 영어
+    		  if(lang.equals("영어")) {
+    			  kvo.setDiction_word(arr[0]);
+    			  evo.setDiction_word(value[0]);
+    		  }else {
+    			  kvo.setDiction_word(value[0]);
+    			  evo.setDiction_word(arr[0]);
+    		  }
+    		  int kseq = wordService.inertK(kvo);
+    		  int eseq = wordService.insertE(evo);
+    		  
+    		  ReferVO vo = new ReferVO();
+			  vo.setEdiction_no(eseq);
+			  vo.setKdiction_no(kseq);
+			  int check = wordService.insertRefer(vo);
+    	  }
+    	  if(arr.length == value.length){
     		  String memo = "";
     		  for (int i = 0; i < value.length; i++) {
     			  result = insertCard(user_no, arr[i], value[i], memo);

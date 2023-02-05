@@ -20,8 +20,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		delete words where word_no = #{word_no}
 	</delete>
 	
-	<select id = "meaningList" parameterType="String" resultType="vo.AdminVO">
-		select k.kDiction_word from kDiction k , eDiction e where e.eDiction_no = k.kDiction_no and e.eDiction_word like #{word_name}
+	<select id = "meaningList" parameterType="diction" resultType="vo.AdminVO">
+		select k.kDiction_word, e.ediction_word from kDiction k , eDiction e where  e.eDiction_word like #{Diction_word} or k.kdiction_word like #{Diction_word}
 	</select>
 	
 	<insert id = "insert" parameterType="vo.WordVO">

@@ -278,6 +278,8 @@ $(document).ready(function(){
 				return;
 			}
 		 }
+		 
+	 	let lang = "";
 	 
 //	 	등록할 단어 뜻 불러오는 ajax , 모달에서는 click function이 아닌 on(click)해줘야 정상실행됨
 		 $(document).on("click","#searchWord_btn",function(event){
@@ -285,40 +287,53 @@ $(document).ready(function(){
 				 alert("등록할 단어를 입력해주십시오.");
 				 return;
 			 }
-			
-			 httpRequest = new XMLHttpRequest();
-				
-				if(!httpRequest){
-					alert("인스턴스 생성 불가!");
-					return;
-				}
-				
-				var httpMethod = "GET";
-				var httpParam = $('#searchWord').val();
-				var httpURL = "${pageContext.request.contextPath}/word/search?word_name="+ $('#searchWord').val();
-			
-				httpRequest.open(httpMethod,httpURL,true);
-				
-				//callback method 지정
-				httpRequest.onreadystatechange = resultSearchWord;
-				httpRequest.send();
-			
-			})
-			
-			function resultSearchWord(){
-				if(httpRequest.readyState == 4 && httpRequest.status == 200){
-					
-					var data = httpRequest.responseText;
-					console.log(data);
-					if(data == "검색된 결과가 없습니다."){
-						alert(data);
-						return;
-					}else{						
-						$('#answerWord').attr("value",data);
-					return;
-					}
-				}
-			}
+			 var langhttpParam = "text="+ encodeURIComponent($('#searchWord').val()); // 파라미터 한글이면 깨지지 않게 인코딩해줌
+			 var langhttpURL = "${pageContext.request.contextPath}/trans/checkLang";
+			 $.ajax({
+			        type: "GET",
+			        url: langhttpURL,
+			        dataType: 'text',
+			        async: false,
+			        data: {"text": $('#searchWord').val()},
+			        success: function(result){
+			            if(result != null){
+			            	
+			            	var httpURL = "${pageContext.request.contextPath}/word/search";
+			            	 $.ajax({
+			 			        type: "GET",
+			 			        url: httpURL,
+			 			        dataType: 'text',
+			 			        async: false,
+						        data: {"word_name":$('#searchWord').val(), "lang": result},
+			 			        success: function(data){
+			 			    	   if(data != null){
+			 			    		   const obj = JSON.parse(data);
+			 			    		  if(data == "검색된 결과가 없습니다."){
+			 								alert(obj);
+			 								return;
+			 							}else{	
+			 								if(obj.lang == "ko"){
+			 									$('#answerWord').attr("value",obj.en);
+			 								}else{
+			 									$('#answerWord').attr("value",obj.ko);
+			 								}
+			 							    return;
+			 							}
+
+			 			    	   }
+			 			       }//2success
+			 			    })//2ajax
+			            	
+			            }else{ // 안됬을때
+			            	alert("다시 시도해주세요!!");
+			            	return;
+			        	}
+			     }//1success
+			     
+			 })//1ajax
+			 
+		 })
+
 			
 //		 	카드 등록 ajax
 		 $(document).on("click","#insert",function(){
@@ -357,7 +372,6 @@ $(document).ready(function(){
 		 })
 		 
 		  function changeLike(i){
-		console.log($('.like'+i).val());
 		
 			if($('.like'+i).val() == 0){
 				$('.like'+i).html("<img src='${pageContext.request.contextPath }/resources/img/heart 1.png' width='15px;'>");

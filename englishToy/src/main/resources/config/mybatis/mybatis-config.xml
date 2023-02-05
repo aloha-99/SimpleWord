@@ -11,6 +11,8 @@
 	<typeAliases>
 		<!-- <typeAlias type="vo.BoardVo" alias="board"/> -->
 		<typeAlias type="vo.UserVO" alias="user"/>
+		<typeAlias type="vo.DictionVO" alias="diction"/>
+		<typeAlias type="vo.ReferVO" alias="refer"/>
 	</typeAliases>
 
 	<mappers>	
@@ -19,6 +21,7 @@
 		<mapper resource="config/mybatis/mapper/admin.xml"/>
 		<mapper resource="config/mybatis/mapper/login.xml"/>
 		<mapper resource="config/mybatis/mapper/join.xml"/>
+		<mapper resource="config/mybatis/mapper/diction.xml"/>
 
 	</mappers>
 </configuration>

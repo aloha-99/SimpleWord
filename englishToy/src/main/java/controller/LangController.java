@@ -45,7 +45,6 @@ public class LangController {
         String clientSecret = "xSr0f7uvHu"; //애플리케이션 클라이언트 시크릿값";
 
         String text = request.getParameter("text");
-        
         String query;
         try {
             query = URLEncoder.encode(text, "UTF-8");
