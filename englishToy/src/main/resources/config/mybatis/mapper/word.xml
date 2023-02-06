@@ -21,7 +21,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id = "meaningList" parameterType="diction" resultType="vo.AdminVO">
-		select k.kDiction_word, e.ediction_word from kDiction k , eDiction e where  e.eDiction_word like #{Diction_word} or k.kdiction_word like #{Diction_word}
+		select e.ediction_word , k.kdiction_word
+		from ediction e, refer r , kdiction k
+		where r.ediction_no = e.ediction_no 
+		and r.kdiction_no = k.kdiction_no
+		and  
+		<choose>
+			<when test="lang=='ko'">
+				r.kdiction_no = (select k.kdiction_no from kdiction k where k.kdiction_word like #{Diction_word})
+			</when>
+			<otherwise>
+				r.ediction_no = (select e.ediction_no from ediction e where e.ediction_word like #{Diction_word})
+			</otherwise>
+		</choose>
 	</select>
 	
 	<insert id = "insert" parameterType="vo.WordVO">

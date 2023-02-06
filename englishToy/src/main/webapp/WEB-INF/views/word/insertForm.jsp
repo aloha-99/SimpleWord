@@ -287,7 +287,7 @@ $(document).ready(function(){
 				 alert("등록할 단어를 입력해주십시오.");
 				 return;
 			 }
-			 var langhttpParam = "text="+ encodeURIComponent($('#searchWord').val()); // 파라미터 한글이면 깨지지 않게 인코딩해줌
+			 var langhttpParam = "text="+ $('#searchWord').val(); // 파라미터 한글이면 깨지지 않게 인코딩해줌
 			 var langhttpURL = "${pageContext.request.contextPath}/trans/checkLang";
 			 $.ajax({
 			        type: "GET",
@@ -297,7 +297,6 @@ $(document).ready(function(){
 			        data: {"text": $('#searchWord').val()},
 			        success: function(result){
 			            if(result != null){
-			            	
 			            	var httpURL = "${pageContext.request.contextPath}/word/search";
 			            	 $.ajax({
 			 			        type: "GET",

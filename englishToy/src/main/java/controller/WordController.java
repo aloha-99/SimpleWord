@@ -85,6 +85,9 @@ public class WordController {
    public Object search(HttpServletRequest request) {
       String word_name = request.getParameter("word_name");
       String lang = request.getParameter("lang");
+      
+      System.out.println(word_name);
+      System.out.println(lang);
       DictionVO vo = new DictionVO();
       vo.setDiction_word(word_name);
       vo.setLang(lang);
