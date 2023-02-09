@@ -1,4 +1,4 @@
-# SimpleWord
+# SimpleWord 📓
 
 
 
@@ -89,7 +89,7 @@
 			<td>JQuery-3.5.2</td>
 		</tr>
     <tr align="center">
-			<td>APO</td>
+			<td>API</td>
 			<td>카카오 로그인, 네이버 번역 및 언어감지</td>
 		</tr>
 	</table>
